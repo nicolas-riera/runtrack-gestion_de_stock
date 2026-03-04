@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from database import *
 from export_csv import *
@@ -64,6 +68,7 @@ class StoreApp:
         export_button_frame.pack(pady=0)
 
         tk.Button(export_button_frame, text="Exporter liste", width=15, command=lambda: export_to_csv(self.database.products)).grid(row=0, column=1, padx=10)
+        tk.Button(export_button_frame, text="Graphique stock", width=15, command=lambda: self.show_graph_menu()).grid(row=0, column=2, padx=10)
 
     def refresh_table(self):
         for row in self.tree.get_children():
@@ -175,3 +180,37 @@ class StoreApp:
             messagebox.showinfo("Gestion du produit", "Le produit a été modifié.")
         else:
             messagebox.showerror("Erreur", "Vous devez sélectionner un élément pour le modifier.")
+
+    def show_graph_menu(self):
+
+        self.root.pack_slaves() 
+        for widget in self.root.winfo_children():
+            widget.pack_forget()
+
+        self.graph_frame = tk.Frame(self.root)
+        self.graph_frame.pack(fill="both", expand=True)
+
+        products = [p[1] for p in self.database.products] 
+        quantities = [p[4] for p in self.database.products]  
+
+        fig = Figure(figsize=(8,4))
+        ax = fig.add_subplot(111)
+        ax.bar(products, quantities, color="skyblue")
+        ax.set_xlabel("Produit")
+        ax.set_ylabel("Quantité en stock")
+        ax.set_title("Stock des produits")
+        ax.set_xticklabels(products, rotation=45, ha="right")
+
+        canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=True)
+
+        tk.Button(self.graph_frame, text="Retour", width=15, command=self.show_main_menu).pack(pady=10)
+
+    def show_main_menu(self):
+ 
+        self.graph_frame.destroy()
+
+        self.create_header()
+        self.create_table()
+        self.create_form()
