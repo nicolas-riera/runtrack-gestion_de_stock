@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
+from database import *
+
 class StoreApp:
 
     def __init__(self, root):
@@ -8,6 +10,8 @@ class StoreApp:
         self.root.title("Gestion de Stock")
         self.root.geometry("800x800")
         self.root.configure(bg="#f4f4f4")
+
+        self.database = SQLManager()
 
         self.create_header()
         self.create_table()
@@ -30,18 +34,27 @@ class StoreApp:
         table_frame = tk.Frame(self.root)
         table_frame.pack(pady=20)
 
-        columns = ("ID", "Nom", "Description", "Prix", "Quantité", "Catégorie")
+        columns = ("ID", "Nom", "Description", "Prix", "Qté", "Catégorie")
 
         self.tree = ttk.Treeview(
             table_frame,
             columns=columns,
             show="headings",
-            height=15
+            height=17
         )
+
+        for product in self.database.products:
+            self.tree.insert("", "end", values=product)
 
         for col in columns:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=120)
+
+        self.tree.column("ID", width=30)        
+        self.tree.column("Nom", width=180)  
+        self.tree.column("Description", width=200)    
+        self.tree.column("Prix", width=40)
+        self.tree.column("Qté", width=40)
+        self.tree.column("Catégorie", width=130)
 
         self.tree.pack()
 
@@ -68,7 +81,7 @@ class StoreApp:
         tk.Label(form_frame, text="Catégorie").grid(row=4, column=0)
         self.combo_category = ttk.Combobox(
             form_frame,
-            values=["Catégorie 1", "Catégorie 2", "Catégorie 3"]
+            values=self.database.categories
         )
         self.combo_category.grid(row=4, column=1)
 
