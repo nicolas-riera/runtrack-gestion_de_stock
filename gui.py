@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from database import *
+from export_csv import *
 
 class StoreApp:
 
@@ -57,6 +58,11 @@ class StoreApp:
         self.tree.column("Catégorie", width=130)
 
         self.tree.pack()
+
+        export_button_frame = tk.Frame(self.root)
+        export_button_frame.pack(pady=0)
+
+        tk.Button(export_button_frame, text="Exporter liste", width=15, command=lambda: export_to_csv(self.database.products)).grid(row=0, column=1, padx=10)
 
     def refresh_table(self):
         for row in self.tree.get_children():
