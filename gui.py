@@ -200,6 +200,11 @@ class StoreApp:
         ax.set_ylabel("Quantité en stock")
         ax.set_title("Stock des produits")
         ax.set_xticklabels(products, rotation=45, ha="right")
+        ax.set_xlim(-0.5, len(products)-0.5)
+
+        if len(products) > 20:
+            ax.set_xticks(range(len(quantities)))
+            ax.set_xticklabels([""]*len(quantities))    
 
         canvas = FigureCanvasTkAgg(fig, master=self.graph_frame)
         canvas.draw()
