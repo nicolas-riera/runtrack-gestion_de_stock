@@ -98,7 +98,7 @@ class StoreApp:
         button_frame = tk.Frame(self.root)
         button_frame.pack()
 
-        tk.Button(button_frame, text="Ajouter", width=15).grid(row=0, column=0, padx=10)
+        tk.Button(button_frame, text="Ajouter", width=15, command=lambda: self.add_product()).grid(row=0, column=0, padx=10)
         tk.Button(button_frame, text="Modifier", width=15, command=lambda: self.edit_selected_product()).grid(row=0, column=1, padx=10)
         tk.Button(button_frame, text="Supprimer", width=15, command=lambda: (self.database.delete_selected_product(f"{self.get_selected_product_id()}"), self.refresh_table())).grid(row=0, column=2, padx=10)
 
@@ -119,6 +119,21 @@ class StoreApp:
         self.entry_price.delete(0, tk.END)
         self.entry_qty.delete(0, tk.END)
         self.combo_category.set("")
+
+    def add_product(self):
+
+        name = self.entry_name.get()         
+        description = self.entry_desc.get()   
+        price = self.entry_price.get()     
+        quantity = self.entry_qty.get()    
+        category = self.combo_category.get() 
+
+        if name and description and price and quantity and category:
+            self.database.add_product(name, description, price, quantity, category)
+
+        self.refresh_table()
+        self.clear_form()
+
     
     def edit_selected_product(self):
 
