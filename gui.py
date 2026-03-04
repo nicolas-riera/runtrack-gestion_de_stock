@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 
 from database import *
 from export_csv import *
@@ -73,7 +74,6 @@ class StoreApp:
             
         self.tree.pack()
 
-
     def create_form(self):
         form_frame = tk.Frame(self.root)
         form_frame.pack(pady=30)
@@ -143,10 +143,11 @@ class StoreApp:
 
         if name and description and price and quantity and category:
             self.database.add_product(name, description, price, quantity, category)
-
-        self.refresh_table()
-        self.clear_form()
-
+            self.refresh_table()
+            self.clear_form()
+            messagebox.showinfo("Gestion du produit", "Le produit a été ajouté.")
+        else:
+            messagebox.showerror("Erreur", "Vous devez entrer toutes les informations !")
     
     def edit_selected_product(self):
 
@@ -169,6 +170,8 @@ class StoreApp:
                 self.database.update_quantity(quantity, id)
             if category:
                 self.database.update_category(category, id)
-
-        self.refresh_table()
-        self.clear_form()
+            self.refresh_table()
+            self.clear_form()
+            messagebox.showinfo("Gestion du produit", "Le produit a été modifié.")
+        else:
+            messagebox.showerror("Erreur", "Vous devez sélectionner un élément pour le modifier.")

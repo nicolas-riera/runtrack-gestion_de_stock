@@ -1,4 +1,5 @@
 import mysql.connector
+from tkinter import messagebox
 
 class SQLManager:
     def __init__(self):
@@ -31,6 +32,7 @@ class SQLManager:
             price = int(price)
             quantity = int(quantity)
         except:
+            messagebox.showerror("Erreur", "Une ou plusieurs valeurs entrées ne sont pas valides.")
             return
         
         id_category = self.get_category_id(category)
@@ -57,6 +59,7 @@ class SQLManager:
             self.refresh_products()
             self.mydb.commit()
         except:
+            messagebox.showerror("Erreur", "La valeur prix entrée n'est pas valide.")
             return
         
     def update_quantity(self, value, id):
@@ -66,6 +69,7 @@ class SQLManager:
             self.refresh_products()
             self.mydb.commit()
         except:
+            messagebox.showerror("Erreur", "La valeur quantité entrée n'est pas valide.")
             return
         
     def update_category(self, value, id):
@@ -76,9 +80,11 @@ class SQLManager:
         self.refresh_products()
         self.mydb.commit()
        
-
     def delete_selected_product(self, selected):
         if selected != "None":
             self.cursor.execute(f"DELETE FROM product WHERE id={selected}")
             self.refresh_products()
             self.mydb.commit()
+            messagebox.showinfo("Gestion du produit", "Le produit a été supprimé.")
+        else:
+            messagebox.showerror("Erreur", "Vous devez sélectionner un élément pour le supprimer.")
