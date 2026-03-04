@@ -99,7 +99,7 @@ class StoreApp:
         button_frame.pack()
 
         tk.Button(button_frame, text="Ajouter", width=15).grid(row=0, column=0, padx=10)
-        tk.Button(button_frame, text="Modifier", width=15).grid(row=0, column=1, padx=10)
+        tk.Button(button_frame, text="Modifier", width=15, command=lambda: self.edit_selected_product()).grid(row=0, column=1, padx=10)
         tk.Button(button_frame, text="Supprimer", width=15, command=lambda: (self.database.delete_selected_product(f"{self.get_selected_product_id()}"), self.refresh_table())).grid(row=0, column=2, padx=10)
 
     def get_selected_product_id(self):
@@ -112,3 +112,35 @@ class StoreApp:
 
         product_id = values[0]
         return product_id
+    
+    def clear_form(self):
+        self.entry_name.delete(0, tk.END)
+        self.entry_desc.delete(0, tk.END)
+        self.entry_price.delete(0, tk.END)
+        self.entry_qty.delete(0, tk.END)
+        self.combo_category.set("")
+    
+    def edit_selected_product(self):
+
+        name = self.entry_name.get()         
+        description = self.entry_desc.get()   
+        price = self.entry_price.get()     
+        quantity = self.entry_qty.get()    
+        category = self.combo_category.get() 
+
+        id = self.get_selected_product_id() 
+
+        if id:
+            if name:
+                self.database.update_name(name, id)
+            if description:
+                self.database.update_description(description, id)
+            if price:
+                self.database.update_price(price, id)
+            if quantity:
+                self.database.update_quantity(quantity, id)
+            if category:
+                self.database.update_category(category, id)
+
+        self.refresh_table()
+        self.clear_form()
