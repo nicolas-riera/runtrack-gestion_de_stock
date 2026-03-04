@@ -58,6 +58,16 @@ class StoreApp:
 
         self.tree.pack()
 
+    def refresh_table(self):
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+
+        for product in self.database.products:
+            self.tree.insert("", "end", values=product)
+            
+        self.tree.pack()
+
+
     def create_form(self):
         form_frame = tk.Frame(self.root)
         form_frame.pack(pady=30)
@@ -90,4 +100,15 @@ class StoreApp:
 
         tk.Button(button_frame, text="Ajouter", width=15).grid(row=0, column=0, padx=10)
         tk.Button(button_frame, text="Modifier", width=15).grid(row=0, column=1, padx=10)
-        tk.Button(button_frame, text="Supprimer", width=15).grid(row=0, column=2, padx=10)
+        tk.Button(button_frame, text="Supprimer", width=15, command=lambda: (self.database.delete_selected_product(f"{self.get_selected_product_id()}"), self.refresh_table())).grid(row=0, column=2, padx=10)
+
+    def get_selected_product_id(self):
+        selected = self.tree.selection()
+        if not selected:
+            return None  
+
+        item = self.tree.item(selected[0])
+        values = item["values"]
+
+        product_id = values[0]
+        return product_id
