@@ -72,28 +72,35 @@ class StoreApp:
         form_frame = tk.Frame(self.root)
         form_frame.pack(pady=30)
 
-        tk.Label(form_frame, text="Nom").grid(row=0, column=0, padx=10, pady=10)
+        tk.Label(
+        form_frame, 
+        text="Gérer les produits", 
+        font=("Arial", 12), 
+        fg="#2c3e50"
+        ).grid(row=0, column=0, columnspan=2, pady=(10, 0))
+
+        tk.Label(form_frame, text="Nom").grid(row=1, column=0, padx=10, pady=10)
         self.entry_name = tk.Entry(form_frame)
-        self.entry_name.grid(row=0, column=1)
+        self.entry_name.grid(row=1, column=1)
 
-        tk.Label(form_frame, text="Description").grid(row=1, column=0)
+        tk.Label(form_frame, text="Description").grid(row=2, column=0)
         self.entry_desc = tk.Entry(form_frame)
-        self.entry_desc.grid(row=1, column=1)
+        self.entry_desc.grid(row=2, column=1)
 
-        tk.Label(form_frame, text="Prix").grid(row=2, column=0)
+        tk.Label(form_frame, text="Prix").grid(row=3, column=0)
         self.entry_price = tk.Entry(form_frame)
-        self.entry_price.grid(row=2, column=1)
+        self.entry_price.grid(row=3, column=1)
 
-        tk.Label(form_frame, text="Quantité").grid(row=3, column=0)
+        tk.Label(form_frame, text="Quantité").grid(row=4, column=0)
         self.entry_qty = tk.Entry(form_frame)
-        self.entry_qty.grid(row=3, column=1)
+        self.entry_qty.grid(row=4, column=1)
 
-        tk.Label(form_frame, text="Catégorie").grid(row=4, column=0)
+        tk.Label(form_frame, text="Catégorie").grid(row=5, column=0)
         self.combo_category = ttk.Combobox(
             form_frame,
             values=self.database.categories
         )
-        self.combo_category.grid(row=4, column=1)
+        self.combo_category.grid(row=5, column=1)
 
         button_frame = tk.Frame(self.root)
         button_frame.pack()
