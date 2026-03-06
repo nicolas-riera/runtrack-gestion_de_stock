@@ -62,7 +62,12 @@ class StoreApp:
         self.tree.column("Qté", width=40)
         self.tree.column("Catégorie", width=130)
 
-        self.tree.pack()
+        self.tree.pack(side="left",fill="both", expand=True)
+
+        self.scrollbar = ttk.Scrollbar(table_frame, orient="vertical", command=self.tree.yview)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.tree.configure(yscrollcommand=self.scrollbar.set)
 
         export_button_frame = tk.Frame(self.root)
         export_button_frame.pack(pady=0)
